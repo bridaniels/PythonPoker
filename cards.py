@@ -114,7 +114,26 @@ def is_full_house_possible(cards):
     cardValues = get_card_values(cards)
     cardValues.sort(reverse=True)
     fullHouseCards = []
+
+    for i in range(4): 
+        sameCount = cardValues.count(cardValues[i])
+        if sameCount == 3: 
+            fullHouseCards.append(cardValues[i])
+            break 
+    if len(fullHouseCards) == 1: 
+        cardValues.remove(fullHouseCards[0])
+        cardValues.remove(fullHouseCards[0])
+        cardValues.remove(fullHouseCards[0])
+        for i in range(3): 
+            sameCount = cardValues.count(cardValues[i])
+            if sameCount == 2: 
+                fullHouseCards.append(cardValues[i])
+                break 
+    if len(fullHouseCards) == 2: 
+        return True, fullHouseCards
     
+    return False, 0 
+
 
 
 

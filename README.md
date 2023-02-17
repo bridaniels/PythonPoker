@@ -35,5 +35,9 @@
 > - Highest Ranked Quads Win
 > - *Same Four-of-a-Kind: Highest Ranked Kicker (5th Card) Wins*
 > 
+> ### [Full House](https://www.poker.org/poker-hands-ranking-chart/what-is-a-full-house/)
+> - Three-of-a-Kind + A Pair 
+
+
 > ### Flush 
 > - 
