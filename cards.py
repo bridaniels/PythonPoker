@@ -93,8 +93,28 @@ def is_straight_flush_possible(cards):
             return True, val % 13
     
     return False, 0  
-
-
+def is_four_possible(cards): 
+    cardValues = get_card_values(cards)
+    found = False
+    num = 1 
+    for i in range(4): 
+        sameCount = cardValues.count(cardValues[i])
+        if sameCount == 4: 
+            found = True
+            num = cardValues[i]
+    if found: 
+        cardValues.remove(num)
+        cardValues.remove(num)
+        cardValues.remove(num)
+        cardValues.remove(num) 
+        cardValues.sort(reverse=True)
+        return True, [num, get_highest_card(cardValues)]
+    return False, 0
+def is_full_house_possible(cards): 
+    cardValues = get_card_values(cards)
+    cardValues.sort(reverse=True)
+    fullHouseCards = []
+    
 
 
 
