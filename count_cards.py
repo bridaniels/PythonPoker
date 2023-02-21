@@ -27,21 +27,38 @@ class Player:
         self.cards = cards
         self.points = points 
 # Create Deck 
-def initialize_deck_facecards(): 
-    starting_deck = []
-    for numval in NUMVAL: 
-        for suit in SUITES: 
-            if numval in FACECARDS: 
-                c = Card(FACECARDS[numval], suit)
-            else: 
-                c = Card(numval,suit)
-            starting_deck.append(c)
-    return starting_deck
 def initialize_deck_one_liner():
     starting_deck = [Card(numval,suit) for numval in NUMVAL for suit in SUITES]
     return starting_deck
+# GET
+def get_card_values(cards): 
+    cardValues = []
+    for c in cards: 
+        cardValues.append(int(c.numval))
+    return cardValues
 '''
 END OF PLAY_POKER.PY 
 '''
 
 # HI-LOW CARD COUNTING STRATEGY 
+count_val = {
+    2: 1,
+    3: 1,
+    4: 1, 
+    5: 1, 
+    6: 1, 
+    7: 0,
+    8: 0,
+    9: 0,
+    10: -1,
+    'J': -1,
+    'Q': -1,
+    'K': -1,
+    'A': -1, 
+    11: -1,
+    12: -1,
+    13: -1,
+    14: -1
+}
+def count_cards(hand): 
+    return sum(count_val[i] for i in hand)

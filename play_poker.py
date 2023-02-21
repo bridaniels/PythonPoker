@@ -35,6 +35,7 @@ class Player:
 Random Card Dealer Work
 '''
 # Create Deck 
+# Can't use Facecards with Certain Math
 def initialize_deck_facecards(): 
     starting_deck = []
     for numval in NUMVAL: 
@@ -111,12 +112,36 @@ def is_ace(cardValue):
     if cardValue == 14 or cardValue == 1: 
         return True
     return False 
-
+# HI-LOW CARD COUNTING STRATEGY 
+count_val = {
+    2: 1,
+    3: 1,
+    4: 1, 
+    5: 1, 
+    6: 1, 
+    7: 0,
+    8: 0,
+    9: 0,
+    10: -1,
+    'J': -1,
+    'Q': -1,
+    'K': -1,
+    'A': -1, 
+    11: -1,
+    12: -1,
+    13: -1,
+    14: -1
+}
+def count_cards(hand): 
+    return sum(count_val[i] for i in hand)
 
 '''
 Player Hand Analysis 
 '''
 # ROYAL FLUSH
+def is_royal_flush(hand,community):
+    cards = hand.append(community) 
+
 
 # STRAIGHT FLUSH
 
