@@ -3,6 +3,7 @@
 
 # Import Libraries 
 import random 
+import copy 
 
 # Basic Setup
 SUITES = ['Heart', 'Diamond', 'Spade', 'Club']
@@ -85,6 +86,17 @@ def turn_river(cards):
 Player Card Analysis 
 '''
 # GET
+def get_players_hand(community,hole):
+    player = copy.deepcopy(community)
+    player.extend(hole)
+    return player
+def get_opponent_hands(community,opp_holes):
+    opp_com = copy.deepcopy(community)
+    x = [0] * len(opp_holes)
+    for i in range(len(opp_holes)): 
+        x[i] = opp_holes[i]
+        x[i].extend(opp_com)
+    return x 
 def get_card_values(cards): 
     cardValues = []
     for c in cards: 
@@ -126,22 +138,22 @@ def find_duplicates(cards):
     
     # One Pair
     if mult == 2: 
-        return True, "One_Pair: {}".format(dupes)
+        return "One_Pair"
     # Two Pair + Four of a Kind 
     elif mult == 4:
         if len(set(dupes)) == 2: 
-            return True, "Two Pairs: {}".format(dupes)
+            return "Two_Pair"
         elif len(set(dupes)) == 1: 
-            return True, "Four of a Kind: {}".format(dupes)
+            return "Four_of_a_Kind"
     # Three of a Kind 
     elif mult == 3: 
-        return True, "Three of a Kind: {}".format(dupes)
+        return "Three_of_a_Kind"
     # Full House
     elif mult == 5 and len(set(dupes)) == 2: 
-        return True, "Full House: {}".format(dupes)
+        return "Full_House"
     # NOT ABOVE 
     else: 
-        return False, "NO DUPLICATES: High Card = {}".format(max(numbers))
+        return "NO DUPLICATES: High Card"
 # STRAIGHT/FLUSH/ROYAL
 def is_straight_flush_royal(cards): 
     # SETUP
@@ -181,11 +193,11 @@ def is_straight_flush_royal(cards):
     if is_straight(values) == True:
         if is_flush(suits) == True: 
             if is_royal(values) == True: 
-                return True, "Royal_Flush"
-            return True, "Straight_Flush"
-        return True, "Straight"
+                return "Royal_Flush"
+            return "Straight_Flush"
+        return "Straight"
     if is_flush(suits) == True: 
-        return True, "Flush"
+        return "Flush"
     return False
 
 '''
@@ -348,32 +360,125 @@ def is_one_pair(cards):
 # HIGH CARD 
 def is_high_card(cards):
     numbers = [c.numval for c in cards]
-    return max(numbers), 10
+    numbers.sort()
+    return numbers[-1], 10
 
 '''
 CHECKING
 '''
 def check_hand(cards, sfr_analysis, fd_analysis):
     # STRAIGHT FLUSH ROYAL + Find Duplicates Analysis 
-    if sfr_analysis[0] == True or fd_analysis == True: 
-        if sfr_analysis[1] == "Royal_Flush":
-            return is_royal_flush(cards)
-        elif sfr_analysis[1] == "Straight_Flush":
-            return is_straight_flush(cards)
-        elif fd_analysis[1] == "Four_of_a_Kind":
-            return is_four_of_a_kind(cards)
-        elif fd_analysis[1] == "Full_House":
-            return is_full_house(cards)
-        elif sfr_analysis[1] == "Flush":
-            return is_flush(cards)
-        elif sfr_analysis[1] == "Straight":
-            return is_straight(cards)
-        elif fd_analysis[1] == "Three_of_a_Kind":
-            return is_three_of_a_kind(cards)
-        elif fd_analysis[1] == "Two_Pair":
-            return is_two_pair(cards)
-        elif fd_analysis[1] == "One_Pair":
-            return is_one_pair(cards)
+    if sfr_analysis == "Royal_Flush":
+        return is_royal_flush(cards)
+    elif sfr_analysis == "Straight_Flush":
+        return is_straight_flush(cards)
+    elif fd_analysis == "Four_of_a_Kind":
+        return is_four_of_a_kind(cards)
+    elif fd_analysis == "Full_House":
+        return is_full_house(cards)
+    elif sfr_analysis == "Flush":
+        return is_flush(cards)
+    elif sfr_analysis == "Straight":
+        return is_straight(cards)
+    elif fd_analysis == "Three_of_a_Kind":
+        return is_three_of_a_kind(cards)
+    elif fd_analysis == "Two_Pair":
+        return is_two_pair(cards)
+    elif fd_analysis == "One_Pair":
+        return is_one_pair(cards)
     else: 
         numbers = [c.numval for c in cards]
-        return max(numbers)
+        numbers.sort()
+        return numbers[-1], 10
+'''
+ANALYZE OPPONENTS HANDS
+'''
+def check_opponents(community,opp_hands): 
+    hand = get_opponent_hands(community,opp_hands)
+    k = len(hand)
+    sfr,fd,check = [0]*k, [0]*k, [0]*k
+    for i in range(k): 
+        sfr[i] = is_straight_flush_royal(hand[i])
+        fd[i] = find_duplicates(hand[i])
+        check[i] = check_hand(hand[i],sfr[i],fd[i])
+    return hand,sfr,fd,check
+
+'''
+WINNING HAND
+'''
+winning_hands = {
+    100 : "Royal_Flush",
+     90 : "Straight_Flush",
+     80 : "Four_of_a_Kind", 
+     70 : "Full_House", 
+     60 : "Flush", 
+     50 : "Straight", 
+     40 : "Three_of_a_Kind", 
+     30 : "Two_Pair",
+     20 : "One_Pair",
+     10 : "High_Card"
+}
+def winner(player1_check, check): 
+    player = 0
+    win = player1_check[-1]
+    for i in range(len(check)): 
+        if check[i][-1] > win: 
+            win = check[i][-1]
+            player = i+1
+        elif check[i][-1] == win: 
+            player = "mult"
+    if win in winning_hands: 
+        hand = winning_hands[win]
+    return hand, win, player 
+'''
+CARD COUNTER
+'''
+# Hi-Lo Counter
+def player_card_count(running_count, new_cards): 
+    values = [n.numval for n in new_cards]
+    for i in range(len(values)): 
+        if 2 <= values[i] <= 6: 
+            running_count += 1
+        elif 7 <= values[i] <= 9:
+            running_count += 0 
+        else: 
+            running_count -= 1 
+    return running_count
+def opponent_card_count(hands):
+    values = []
+    running_count = 0
+    for i in range(len(hands)): 
+        values.extend([n.numval for n in hands[i]])
+    for i in range(len(values)): 
+        if 2 <= values[i] <= 6: 
+            running_count += 1
+        elif 7 <= values[i] <= 9:
+            running_count += 0 
+        else: 
+            running_count -= 1 
+    return running_count
+def community_card_count(community_cards):
+    running_count = 0 
+    values = [n.numval for n in community_cards]
+    for i in range(len(values)): 
+        if 2 <= values[i] <= 6: 
+            running_count += 1
+        elif 7 <= values[i] <= 9:
+            running_count += 0 
+        else: 
+            running_count -= 1 
+    return running_count
+def total_card_count(player_hand, hands, community):
+    running_count = 0  
+    values = [n.numval for n in player_hand]
+    for i in range(len(hands)): 
+        values.extend([n.numval for n in hands[i]])
+    values.extend([n.numval for n in community])
+    for i in range(len(values)): 
+        if 2 <= values[i] <= 6: 
+            running_count += 1
+        elif 7 <= values[i] <= 9:
+            running_count += 0 
+        else: 
+            running_count -= 1 
+    return running_count
