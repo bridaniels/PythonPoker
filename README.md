@@ -41,3 +41,10 @@
 
 > ### Flush 
 > - 
+
+
+
+# IN PROGRESS 
+- use `set` to define poker hands 
+    - class methods + properties 
+- then use `oop` to define 
