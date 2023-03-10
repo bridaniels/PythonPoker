@@ -141,27 +141,50 @@ class POKER_TABLE:
         self._pot_winner = self._river_winner
 
 
+'''
+RUNNING ABOVE CODE 
+'''
 
+if __name__ == '__main__': 
+    num_players = 5
+    count = 5000
 
+    columns = ['player'+str(i) for i in range(num_players)]
+    columns += ['community_cards', 'deal_winner', 'flop_winner', 'turn_winner', 'river_winner']
+    columns += ['deal_winner_is_winner', 'flop_winner_is_winner', 'turn_winner_is_winner']
+    columns += ['num_ace_players', 'ace_player_is_winner']
+    columns += ['num_pair_players', 'pair_player_is_winner']
+    columns += ['num_mini_flush_players', 'mini_flush_player_is_winner']
 
+    PokerGame = namedtuple('PokerGame', columns)
 
+    games = []
+    for i in range(count): 
+        table = POKER_TABLE(num_players, deck(shuffled=True))
+        table.one_game()
+        gamestr = str(table)
+        gamevals = gamestr.split()
+        game = PokerGame(*gamevals)
+        print(game)
+        games.append(game)
+    
+    #ACE WINNERS
+    ace_winners = sum([int(x.ace_player_is_winner) for x in games])
+    ace_high_exists = sum([int(int(x.num_ace_players) > 0 ) for x in games])
+    print(ace_winners, ace_high_exists)
+    #PAIR WINNERS
+    pair_winners = sum([int(x.pair_player_is_winner) for x in games])
+    pair_player_exists = sum([int(int(x.num_pair_players) > 0) for x in games])
+    print(pair_winners, pair_player_exists)
+    #FLUSH WINNERS
+    mini_flush_winners = sum([int(x.mini_flush_player_is_winner) for x in games])
+    mini_flush_exists = sum([int(int(x.num_mini_flush_players) > 0 ) for x in games])
+    mini_flush_flop_winners = sum([int(int(x.num_mini_flush_players) > 0 and x.flop_winner_is_winner) for x in games])
+    print(mini_flush_winners, mini_flush_flop_winners, mini_flush_exists)
 
-
-
-
-
-
-
-
-
-
-
-
+    print("%d of %d Games Where Ace High During Deal is a Winner" % (ace_winners, count))
 
 
     
-
-
-    
-
+#Reference
 #https://github.com/gabhijit/pycon/blob/master/2019/poker/pokertable.py
