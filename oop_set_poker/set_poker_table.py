@@ -40,6 +40,128 @@ class POKER_TABLE:
     @property
     def players(self): 
         return self._players 
+    #DEAL TWO CARDS TO PLAYERS 
+    def deal(self): 
+        for i in range(2): 
+            for player in self._players: 
+                player._own_cards.append(self._deck.pop())
+    #BURN TOP CARD 
+    def burn_card(self): 
+        self._burnt_cards.append(self._deck.pop())
+    #FIRST ROUND
+    def flop(self): 
+        self.burn_card()
+        for i in range(3):
+            self._community_cards.append(self._deck.pop())
+    #SECOND ROUND
+    def turn(self): 
+        self.burn_card()
+        self._community_cards.append(self._deck.pop())
+    #THIRD AND FINAL ROUND
+    def river(self):
+        self.burn_card()
+        self._community_cards.append(self._deck.pop())
+
+
+    @property
+    def table_ranks(self): 
+        return dict(sorted(self._table_ranks.items(),
+                           key=lambda kv: kv[0]))
+    def __repr__(self):
+        players = " ".join([str(player) for player in self._players])
+        community_cards = ":".join(self._community_cards)
+
+        return " ".join([players, community_cards, 
+                         str(self._deal_winner),
+                         str(self._flop_winner), 
+                         str(self._turn_winner),
+                         str(self._river_winner),
+                         str(int(self._deal_winner == self._river_winner)), 
+                         str(int(self._flop_winner == self._river_winner)), 
+                         str(int(self._turn_winner == self._river_winner)), 
+                         str(len(self._ace_high_players)), 
+                         str(int(self._river_winner in self._ace_high_players)), 
+                         str(len(self._pair_players)), 
+                         str(int(self._river_winner in self._pair_players)),
+                         str(len(self._mini_flush_players)),
+                         str(int(self._river_winner in self._mini_flush_players))
+                         ])
+    
+    def rank_players(self, pre_flop=False): 
+        player_hands = {}
+        #ANALYZE AFTER DEAL - BEFORE FIRST ROUND 
+        if pre_flop: 
+            for i, player in enumerate(self._players): 
+                player_hands[i] = SINGLEPOKERHAND.from_string(" ".join(player.own_cards))
+                if max(player_hands[i].ranks) == 14: #DO THEY HAVE ACE?
+                    self._ace_high_players.append(i)
+                if player_hands[i].score == 2: #TWO PAIRS 
+                    self._pair_players.append(i)
+                if len(set(player_hands[i].suits)) == 1: #MINI FLUSH
+                    self._mini_flush_players.append(i)
+        else: 
+            for i, player in enumerate(self._players): 
+                possible_hands = []
+                for c in combinations(self._community_cards, 3): 
+                    hand = player.own_cards + list(c)
+                    possible_hands.append(BESTPOKERHANDS.from_string(" ".join(hand)))
+                player_hands[i] = sorted(possible_hands, reverse=True)[0]
+        players = sorted(player_hands.items(), key=lambda kv:kv[1], reverse=True)
+        for i in range(len(players)): 
+            player_id = players[i][0]
+            self._table_ranks[i] = player_id
+
+
+    
+    def one_game(self): 
+        #PRE-FLOP
+        self.deal()
+        self.rank_players(pre_flop=True)
+        self._deal_winner = self._table_ranks[0]
+
+        #FLOP
+        self.burn_card()
+        self.flop()
+        self.rank_players()
+        self._flop_winner = self._table_ranks[0]
+
+        #TURN
+        self.burn_card()
+        self.turn()
+        self.rank_players()
+        self._turn_winner = self._table_ranks[0]
+
+        #RIVER
+        self.burn_card()
+        self.river()
+        self.rank_players()
+        self._river_winner = self._table_ranks[0]
+
+        #WINNER
+        self._pot_winner = self._river_winner
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
     
 
 #https://github.com/gabhijit/pycon/blob/master/2019/poker/pokertable.py
