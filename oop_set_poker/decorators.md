@@ -131,6 +131,50 @@
 
 
 
+
+# Magical Operator
+---
+- define operators in python 
+- double underscores represent magic methods 
+## [`__lt__(self,other)`](https://www.pythonpool.com/python-__lt__/)
+- **Less Than Operator (<)**
+- useful for sorting and operator overloading and comparing 
+- *cannot be used directly* 
+- Returns True if *less than*, Returns False if not
+
+```
+class Weight: 
+    def __init__(self, weight): 
+        self.weight = weight
+    def __lt__(self,other):
+        return self.weight < other.weight
+    def __gt__(self,other): 
+        return self.weight > other.weight
+a = Weight(50)
+b = Weight(60)
+c = Weight(70)
+print(a<b and b>c)
+
+>>> False 
+```
+
+| Magic Operator |     | Symbol |
+|----------------|-----|--------|
+|`__lt__` | Less Than | < |
+|`__gt__` | Greater Than| > |
+|`__le__` | Less Than/Equal To | <= |
+|`__ge__` | Greater Than/Equal To | >= |
+|`__eq__` | Equal To | == |
+|`__ne__` | Not Equal | != |
+
+
+## [`__repr__(self)`](https://www.geeksforgeeks.org/python-__repr__-magic-method/)
+- Returns printable string representation of an object 
+- *gives representation of the object*
+- when `print()` is called 
+
+
+
 # References
 ---
 - [G4G: Function Decorators](https://www.geeksforgeeks.org/function-decorators-in-python-set-1-introduction/)
