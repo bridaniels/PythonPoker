@@ -27,6 +27,21 @@
 - `__repr__` Printable Representation of Object as a String 
     - Returns Readable String when `print()` is called 
 
+### `class SINGLEPOKERHAND(POKERHAND)`
+
+### `class BESTPOKERHANDS(POKERHAND)`
+- Define What Possible Hand's Exist 
+    - **Flush**: 5 cards of same suit 
+        - length of `set(self._suits) == 1` -> only one suit 
+    - **Straight**: 5 numbers in order 
+        - lenght of `set(self._ranks) == 5` -> need 5 different ranks 
+        - max rank - min rank == 4 -> should be in order 
+        - **OR** if `set(self._ranks) == 5` and max rank == 14 (ACE) and the sum of ranks == 28 
+            - 14 + 2 + 3 + 4 + 5 = 28 
+            - Ace can be a high or low card in a straight 
+    - **Straight Flush**: 5 numbers in order of the same suit 
+        - call straight and flush functions (recursive) 
+
 
 
 
