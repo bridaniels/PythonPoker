@@ -50,11 +50,13 @@ class POKERHAND:
         return self._suits
     @property 
     def ordered(self): 
-        if self._ordered: return self._ordered
+        if self._ordered: 
+            return self._ordered
         rank_counts = list(set([(i, self._ranks.count(i)) for i in self._ranks]))
         return sorted(rank_counts, key=itemgetter(1,0), reverse=True)
     @property
     def score(self): 
+        # bitwise operators - bitwise left shift -> multiplying by power of 2 
         score = 1 << 0 
         if self.pair(): score <<= 1
         return score 
