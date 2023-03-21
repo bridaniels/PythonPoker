@@ -115,24 +115,28 @@ class BESTPOKERHANDS(POKERHAND):
 RUNNING THE ABOVE CODE
 '''
 if __name__ == '__main__': 
+    #block1
     hand = 'AC 2S 3C 4H 5S'
     assert BESTPOKERHANDS.from_string(hand).straight() == True 
     hand = 'AC 2S 3C 4H 5S' 
     print(BESTPOKERHANDS.from_string(hand).ordered)
 
+    #block2
     hand = '8C TS JC 9H 7S'
     print("Hand {}: Is Straight?".format(hand), BESTPOKERHANDS.from_string(hand).straight())
     print("Hand {}: ordered".format(hand), BESTPOKERHANDS.from_string(hand).ordered)
     
+    #block3
     hand = '8C 8S 8D 8H 7S'
     print(BESTPOKERHANDS.from_string(hand).ordered)
     print("Hand {}: Four of a Kind".format(hand), BESTPOKERHANDS.from_string(hand).four_of_a_kind())
 
+    #block4
     hand = '8C 8S'
     mph = SINGLEPOKERHAND.from_string(hand)
     print(mph.score)
 
-    
+    #block5
     x = '9S:JC 6C:9D 2S:3D 6H:4S QC:7H TD:8D JS:7C 8H:4D 9C:4H:9H:JH:8S 4 0 1 0'
     from itertools import combinations
     h1 = '9S:JC'
@@ -144,6 +148,7 @@ if __name__ == '__main__':
         ph21 = BESTPOKERHANDS.from_string(h21, sep=":")
         print(h11, ph11.score, h21, ph21.score, ph11 > ph21)
 
+    #block6
     print("================")
     h1 = '2H:9S'
     h2 = '2D:2S'
