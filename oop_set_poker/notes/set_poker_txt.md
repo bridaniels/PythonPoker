@@ -10,6 +10,7 @@
 - `from_string()`
     - make lists of cards, ranks, and suits
     - `poker_hand` = `@classmethod` (cls) -> removes redundancy  
+    - modifies variables from `__init__()`
 - `@property` Decorator Elements 
     - Returns property attributes of a class
     - `cards()`, `ranks()`, and `suits()`
@@ -50,6 +51,7 @@
 - Do the first two cards dealt to the player make a pair? 
     - **Pair**: 
         - with two cards dealt, should only contain one pair 
+        - if single hand is a pair, return `True`
 
 ### `class BESTPOKERHANDS(POKERHAND)`
 - Define What Possible Hand's Exist 
