@@ -147,18 +147,20 @@ RUNNING ABOVE CODE
 '''
 
 if __name__ == '__main__': 
+    #Block1
     num_players = 5
     count = 5000
 
+    #Block2
     columns = ['player'+str(i) for i in range(num_players)]
     columns += ['community_cards', 'deal_winner', 'flop_winner', 'turn_winner', 'river_winner']
     columns += ['deal_winner_is_winner', 'flop_winner_is_winner', 'turn_winner_is_winner']
     columns += ['num_ace_players', 'ace_player_is_winner']
     columns += ['num_pair_players', 'pair_player_is_winner']
     columns += ['num_mini_flush_players', 'mini_flush_player_is_winner']
-
     PokerGame = namedtuple('PokerGame', columns)
 
+    #Block3
     games = []
     for i in range(count): 
         table = POKER_TABLE(num_players, deck(shuffled=True))
@@ -169,6 +171,8 @@ if __name__ == '__main__':
         print(game)
         games.append(game)
     
+
+    #Block4
     #ACE WINNERS
     ace_winners = sum([int(x.ace_player_is_winner) for x in games])
     ace_high_exists = sum([int(int(x.num_ace_players) > 0 ) for x in games])

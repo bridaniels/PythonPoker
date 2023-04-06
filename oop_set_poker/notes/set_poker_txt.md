@@ -12,7 +12,7 @@
     - `poker_hand` = `@classmethod` (cls) -> removes redundancy  
     - modifies variables from `__init__()`
 - `@property` Decorator Elements 
-    - Returns property attributes of a class
+    - Returns property attributes of a class **GETTERS**
     - `cards()`, `ranks()`, and `suits()`
         - all returning what they are
     - `ordered(self)`
@@ -26,16 +26,16 @@
                     - sorting by count, then rank (backwards from list of sets)
                 - `reverse=True` -> sorting from High to Low 
     - `score(self)`
-        - score defaults as `1 << 0`
-            - Bitwise Operator - performs bitwise calculations - first converts integers into binary 
+        - score defaults as `1 << 0` 
             - `<<` = Bitwise Left Shift: Left moved over by number of bits specified by the right 
                 - shifting is equivalent to multipylying the number with power of 2 
-                - `score = 1`
+                - `score = 1` or `score = 0b1`
         - check players two dealt cards for a pair 
             - CALLS `SINGLEPOKERHAND(POKERHAND)` CLASS 
             - if there is a pair -> more bitwise left shifting 
                 - `score <<= 1` == `score = score << 1`
-                - `score = 2`
+                - `score = 2` or `score = 0b10`
+            - pairs rank higher on the flop than other non-pair hands 
 
 
 - `__lt__` Less Than Magic Operator 

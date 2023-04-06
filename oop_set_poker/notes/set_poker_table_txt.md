@@ -80,8 +80,9 @@
                     - returns numbers values from cards 
                 - add player index identification to `self._ace_high_players`
             - if `.score` == 2: they have two pairs 
-                - class `POKERHAND` ***@property***
-                    - bitwise operators 
+                - class `POKERHAND` ***@property*** 
+                    - bitwise operators -> increase by one left shift to distinguish players whose hands are pairs 
+                        - pairs: (from *SINGLEPOKERHAND(POKERHAND)*)
                 - add player index identification to `self._pair_players`
             - if len(set(`.suits`)) == 1: they have a mini flush 
                 - class `POKERHAND` ***@property***
@@ -111,9 +112,35 @@
                 
 
 - `one_game()`
+    - For Each Round: *Deal, Flop, Turn, River* 
+        - `.rank_players()` after each round 
+        - Set each individual round winner from the `self._table_ranks[0]` value 
 
 
-## `if __name__ == '__main__':`
----
+## RUNNING CODE WITH `if __name__ == '__main__':`
+- Executes Code When File Runs as a Script -> *Not When Imported As Module*
+    - conditional block -> if name == main -> returns true and executes 
+        - module name set to "__main__"
+        - thus only code executed within the specific file will run 
+    
+- Block 1 
+    - identify number of players and game count 
+- Block 2
+    - Create Tuple of results for each game: *store multiple items in a single variable*
+        - Each Player and Their Starting Hands 
+        - Community Cards + Each Round's Winner 
+        - Number of Ace, Pair, and Flush Players and if any of such players were the winner 
+- Block 3 
+    - create empty list of games
+    - for each game: 
+        - define `POKER_TABLE` class object 
+        - run the game, convert table to a string, split table string 
+        - each `gameval` belongs to a column defined in Block 2
+            - turn into `PokerGame` tuple 
+        - append to game list 
+- Block 4 
+    - identify how many ace, pair, or flush hands exist, and if they are winners 
+    - print out of how many games ace high at the deal wins 
+
 
 
